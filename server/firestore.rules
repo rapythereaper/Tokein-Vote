@@ -1,0 +1,60 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    //  match for casting vote;
+    //  path: /Votes/{voter_id}
+    //        ->{vote:"id_of_design"}
+    //
+    //  **** the voter id is pre-generated or just in time generated through admin sdk;
+    //       the generated id is stored as AUTH acount (emial,password,token)
+    //       email={voter_id}@vote.com, passord={voter_id}, token={id:{voter_id}} **** 
+    match /Votes/{voterId} {
+      allow create: if request.auth!=null && validateVotingData(request,voterId,database);
+      allow read: if true;
+    }
+
+    //  match for design record;
+    //  path: /Design/{design_id}
+    //        ->{name:"designer_name",img:"/storage_bucket/design_id.png"};
+    //  
+    // **** the design is uploaded by admin; can also be deleted by admin accout; 
+    //      Firebase doesnot allow to check existance of data in Storage from FireStore
+    //      thus it  become imposibe for us to check for existance of image; 
+    //      so, the admin first uploads the imaage in Storeage bucket & than create doc in firestore ****
+    //
+    //      .... all this bullshit could have been avoiede if we simply listened to data change from cloud function &
+    //           executed requred action. DAMN YOU Sudip bsdk muji khuru khuru credit card nahaleraw.
+    //
+    match /Design/{designId} {
+      allow read: if true;
+      allow create: if request.auth!=null && validateDesignData(request);
+      allow delete: if request.auth!=null && request.auth.token.isAdmin;
+    }
+  }
+
+  function validateVotingData(req,voterId,db){
+    let requestFields = req.resource.data;
+
+    return ( (true) && 
+            req.auth.token.id==voterId &&  
+            requestFields.keys().hasAll(["vote"]) &&  
+            exists(/databases/$(db)/documents/Design/$(requestFields.vote))
+
+            );
+  }
+
+  function validateDesignData(req){
+    let requestFields = req.resource.data;
+    return ( (true) &&
+      req.auth.token.isAdmin==true &&
+      requestFields.keys().hasAll(["name","img"]) &&
+      //requestFields.img=="/DesignCompetition/2021/designId.png" &&
+      requestFields.name.size()>3
+
+      );
+  }
+}

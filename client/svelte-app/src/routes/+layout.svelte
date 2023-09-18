@@ -6,10 +6,10 @@
   AUTH_STATE_LISTENER();
 </script>
 
-ACIT
+<!-- ACIT -->
 
 {#if $Loading}
   Loading....
 {:else}
-  <slot />
+  <slot/>
 {/if}

@@ -1,13 +1,15 @@
 <script>
-    /** @type {import('./$types').LayoutData} */
-   // export let data;
-   import {Loading,AUTH_STATE_LISTENER} from "../stores/Auth"
-   AUTH_STATE_LISTENER();
+  import "../app.postcss";
+  /** @type {import('./$types').LayoutData} */
+  // export let data;
+  import { Loading, AUTH_STATE_LISTENER } from "../stores/Auth";
+  AUTH_STATE_LISTENER();
 </script>
+
 ACIT
 
 {#if $Loading}
-    Loading....
+  Loading....
 {:else}
-    <slot />
+  <slot />
 {/if}

@@ -1,5 +1,6 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
+    import Loading from '$lib/components/Loading.svelte';
 
     import {generateVoteCollection,generateDesignCollection, fetchDocs,listenToCollection} from "../../../stores/Firestore";
     import BarGraph from './BarGraph.svelte';
@@ -32,7 +33,7 @@
 </script>
 
 {#if status=="loading"}
-    Loading.....
+    <Loading/>
 {:else if status=="fetched-design"}
     <p class="py-6">
         Live Vote Count:

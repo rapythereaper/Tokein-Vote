@@ -43,4 +43,10 @@
 	40% {transform: translateY(-30px);}
 	60% {transform: translateY(-15px);}
 }
+.gradient-text{
+    background: -webkit-linear-gradient(#D926A9, #641AE6);
+    -webkit-background-clip: text;
+    background-clip:text;
+    -webkit-text-fill-color: transparent
+    }
 </style>

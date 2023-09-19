@@ -2,7 +2,7 @@
     export let withContainer=false;
     import { fade } from 'svelte/transition';
 </script>
-<div transition:fade={{ delay: 0, duration: 500 }}>
+<div transition:fade={{ delay: 0, duration: 300 }}>
     {#if withContainer}
         <div class="hero min-h-screen bg-base-200">
             <div class="hero-content text-center">

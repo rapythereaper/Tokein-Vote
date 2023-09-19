@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     export let User;
     import { FIREBASE_FIRESTORE } from "../../stores/Firebase";
+    import Loading from "$lib/components/Loading.svelte";
     import {
         generateVoteCollection,
         generateDesignCollection,
@@ -38,7 +39,7 @@
 
 <h1 class="text-5xl font-bold">Voting Portal</h1>
 {#if status == "loading"}
-    Loading...
+    <Loading />
 {:else}
     {#if design.length == 0}
         <p class="py-6 text-xl">

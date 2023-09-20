@@ -33,7 +33,7 @@ import {connectStorageEmulator} from "firebase/storage";
 
 
 /*Added the console message inside if to verify that indeed the controoll flow went inside the if  blocks*/
-if(process.env.NODE_ENV=="development"){
+if(process.env.NODE_ENV.trim()=="development"){
   console.log(`[*] Running in ${process.env.NODE_ENV} mode.`);
 
   connectAuthEmulator(FIREBASE_AUTH, "http://localhost:9099");

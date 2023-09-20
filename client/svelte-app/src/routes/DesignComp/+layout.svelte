@@ -1,6 +1,9 @@
 <script>
     /** @type {import('./$types').LayoutData} */
     //export let data;
+    import {User,} from "../../stores/Auth"
+    import {FIREBASE_AUTH} from "../../stores/Firebase"
+    import {signOut} from "firebase/auth"
     
 </script>
 
@@ -32,27 +35,32 @@
               <li><a>Item 3</a></li>
             </ul>
           </div>
-          <a  href=" " class="btn btn-ghost normal-case text-xl">ACIT Design Blitz-2023</a>
+          <a  href="/DesignComp" class="btn btn-ghost normal-case text-xl">ACIT Design Blitz-2023</a>
         </div>
         <div class="navbar-center hidden lg:flex">
-          <ul class="menu menu-horizontal px-1">
+          <!--cul class="menu menu-horizontal px-1">
             <li><a href=" ">Item 1</a></li>
-            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+            <- svelte-ignore a11y-no-noninteractive-tabindex ->
             <li tabindex="0">
               <details>
                 <summary>Parent</summary>
                 <ul class="p-2">
-                  <!-- svelte-ignore a11y-missing-attribute -->
+                  <- svelte-ignore a11y-missing-attribute ->
                   <li><a>Submenu 1</a></li>
                   <li><a href=" ">Submenu 2</a></li>
                 </ul>
               </details>
             </li>
             <li><a href=" ">Item 3</a></li>
-          </ul>
+          </ul-->
         </div>
         <div class="navbar-end">
-          <a href=" " class="btn">Login</a>
+          {#if $User}
+            <a href=" " on:click={()=>{signOut(FIREBASE_AUTH)}} class="btn btn-error">Logout</a>
+          {:else}
+            <!-- Sing in button of soe short but token page navigate defaut-->
+            <a href="/DesignComp" class="btn btn-primary">Login</a>
+          {/if}
         </div>
       </div>
 </div>

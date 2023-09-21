@@ -1,12 +1,14 @@
 <script>
     import { onDestroy, onMount } from "svelte";
     import {
+    fetchDocs,
         generateDesignCollection,
+        generateVoteCollection,
         listenToCollection,
         postDesing,
     } from "../../../stores/Firestore";
     import { uploadDesign, deleteDesign } from "../../../stores/Storage";
-    import { deleteDoc, doc } from "firebase/firestore";
+    import { deleteDoc, doc,where,query } from "firebase/firestore";
     /** @type {import('./$types').PageData} */
     //export let data;
     const unSubscribe = [];
@@ -67,11 +69,22 @@
     };
     const delDesign = async (id) => {
         const designCollec = generateDesignCollection();
+        const voteCollec =generateVoteCollection();
         try {
             let res = await deleteDesign(designs[id].img);
             res = await deleteDoc(doc(designCollec, id));
+            /* since data cannot bluck deleted in firestore;
+                Must fetch individual doc and delete it one by one
+                anothe way maybe to use bluck write;
+            */
+            let cond=query(voteCollec,where("vote","==",id));
+            res= await fetchDocs(cond);
+            for(let i of res){
+                let m=await deleteDoc(doc(voteCollec,i.id));
+            }
         } catch (err) {
             alert("error deleting file");
+            console.log(err);
         }
     };
 </script>

@@ -12,9 +12,14 @@ service cloud.firestore {
     //  **** the voter id is pre-generated or just in time generated through admin sdk;
     //       the generated id is stored as AUTH acount (emial,password,token)
     //       email={voter_id}@vote.com, passord={voter_id}, token={id:{voter_id}} **** 
+    //
+    //  ****  Since theres no way of listening (i.e with out cloud function )
+    //        to deletion of Design data, all vote associated with the vote
+    //        record must be manually deleated from client side.****
     match /Votes/{voterId} {
       allow create: if request.auth!=null && validateVotingData(request,voterId,database);
       allow read: if true;
+      allow delete: if request.auth!=null && request.auth.token.isAdmin;
     }
 
     //  match for design record;

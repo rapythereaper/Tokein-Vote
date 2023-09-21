@@ -4,6 +4,11 @@ service firebase.storage {
     match /{allPaths=**} {
       allow read, write: if false;
     }
+
+
+    //  ****  Since theres no way of listening (i.e with out cloud function )
+    //  to cahnge in assoiciated in firestor that contains link to storage file
+    //  its deletion must be manually triggred from client side; ****
     match /DesignBlitz/2023/{filename} {
       allow read: if true;
       allow create,delete: if request.auth!=null && request.auth.token.isAdmin==true;

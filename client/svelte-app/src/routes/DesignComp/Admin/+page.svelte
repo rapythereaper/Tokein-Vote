@@ -77,6 +77,11 @@
                 Must fetch individual doc and delete it one by one
                 anothe way maybe to use bluck write;
             */
+            /* Might be bettre to change the order of deletion
+                 1st delete votes
+                 2nd delete desing (storage) actual image file
+                 finally delete firestore record of data;
+            */
             let cond=query(voteCollec,where("vote","==",id));
             res= await fetchDocs(cond);
             for(let i of res){

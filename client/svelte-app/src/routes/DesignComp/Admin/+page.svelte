@@ -150,7 +150,7 @@
             </figure>
             <div class="card-body items-center text-center">
                 <h2 class="card-title">{val.name}</h2>
-                <p>machikne randi ho timihuru sbai randi ho</p>
+                <p><!--machikne randi ho timihuru sbai randi ho --></p>
                 <div class="card-actions">
                     <button
                         class="btn btn-error btn-wide btn-secondary"

@@ -12,6 +12,25 @@
     } from "../../stores/Firestore";
     let status = "loading";
     let design = [];
+
+    const shuffleArray=(array)=>{
+        let currentIndex = array.length,  randomIndex;
+
+        // While there remain elements to shuffle.
+        while (currentIndex > 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    }
+
     onMount(async () => {
         const voteCollec = generateVoteCollection();
         const designCollec = generateDesignCollection();
@@ -47,7 +66,7 @@
         </p>
     {:else if status=="not-voted"}
         <p class="py-6">These are the Top {design.length} designs. Vote for the best one!</p>  
-        {#each  design as de}
+        {#each  shuffleArray(design) as de}
             <div class="card w-96 bg-base-100 shadow-xl" style="margin-bottom:10px">
                 <figure class="px-10 pt-10">
                     <img

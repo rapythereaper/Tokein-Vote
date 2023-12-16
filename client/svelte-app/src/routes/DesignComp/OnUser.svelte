@@ -65,7 +65,7 @@
             Sorry No design Found.<span class="text-5xl font-bold"> 😢 </span>
         </p>
     {:else if status=="not-voted"}
-        <p class="py-6">These are the Top {design.length} designs. Vote for the best one!</p>  
+        <p class="py-6"><!--These are the Top {design.length} designs. Vote for the best one!--></p>  
         {#each  shuffleArray(design) as de}
             <div class="card w-96 bg-base-100 shadow-xl" style="margin-bottom:10px">
                 <figure class="px-10 pt-10">
@@ -77,7 +77,8 @@
                 </figure>
                 <div class="card-body items-center text-center">
                     <h2 class="card-title">{de.name}</h2>
-                    <p>Designer's short description</p>
+                    <h2 class="card-title">P-00{de.p_code}</h2> <!-- FOR ACIT tech fect -->
+                    <p><!--Project short description --></p>
                     <div class="card-actions">
                         <button class="btn btn-secondary" on:click={()=>{window.open(`${de.img}`,"_blank")}}>View Design</button>
                         <button class="btn btn-primary" on:click={()=>{document.getElementById(`${de.id}`).showModal()}}
@@ -86,7 +87,9 @@
                         <dialog id="{de.id}" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl">
                                 <h3 class="font-bold text-lg">Almost there!</h3>
-                                <p class="py-4">Are you sure you want to vote Design {de.name}?</p>
+                                <p class="py-4">Are you sure you want to vote Design?</p>
+                                <b><h3 >name: {de.name} </h3>
+                                <h3 >Code: P-00{de.p_code}</h3></b> <!-- FOR ACIT tech fect -->
                                 <div class="modal-action">
                                     <form method="dialog">
                                         <button class="btn btn-error">Cancel</button>
@@ -115,11 +118,14 @@
                 <div class="card-body items-center text-center">
                     <h2 class="card-title">{de.name}</h2>
                     <p>You voted for {de.name}</p>
+                    <h2 class="card-title">P-00{de.p_code}</h2> <!-- FOR ACIT tech fect -->
                     <div class="card-actions">
-                        <button class="btn btn-block btn-secondary" 
-                            on:click={()=>{document.location="/DesignComp/ViewVote"}}>
-                            Go to live voting
+                        {#if $User.__token__.isAdmin }
+                            <button class="btn btn-block btn-secondary" 
+                                on:click={()=>{document.location="/DesignComp/ViewVote"}}>
+                                Go to live voting
                         </button>
+                        {/if}
                     </div>
                 </div>
             </div>   

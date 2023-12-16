@@ -5,9 +5,16 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
+
+    // **************************** Updated for ACIT Tech Expo ***************************
+    //      ->  changed /Design/{design_id} to /Candidates/{candidate_id} 
+    //      ->  allow /Votes/voterId for only admin (line -> 28)
+    //      ->  vallidated voting data, check for if candidate exsit by itterating over token field rather than
+    //            calling exist() ( line ->57)
+
     //  match for casting vote;
     //  path: /Votes/{voter_id}
-    //        ->{vote:"id_of_design"}
+    //        ->{vote:"id_of_candidate"}
     //
     //  **** the voter id is pre-generated or just in time generated through admin sdk;
     //       the generated id is stored as AUTH acount (emial,password,token)
@@ -18,7 +25,7 @@ service cloud.firestore {
     //        record must be manually deleated from client side.****
     match /Votes/{voterId} {
       allow create: if request.auth!=null && validateVotingData(request,voterId,database);
-      allow read: if true;
+      allow read: if request.auth!=null && (request.auth.token.id==voterId || request.auth.token.isAdmin); // allow to read only their own vote
       allow delete: if request.auth!=null && request.auth.token.isAdmin;
     }
 
@@ -34,32 +41,35 @@ service cloud.firestore {
     //      .... all this bullshit could have been avoiede if we simply listened to data change from cloud function &
     //           executed requred action. DAMN YOU Sudip bsdk muji khuru khuru credit card nahaleraw.
     //
-    match /Design/{designId} {
+    match /Candidates/{candidatesId} {
       allow read: if true;
-      allow create: if request.auth!=null && validateDesignData(request);
+      allow create: if request.auth!=null && request.auth.token.isAdmin && validateCandidateData(request);
       allow delete: if request.auth!=null && request.auth.token.isAdmin;
+    }
+
+    function validateVotingData(req,voterId,db){
+      let requestFields = req.resource.data;
+
+      return ( (true) && 
+              req.auth.token.id==voterId &&  
+              requestFields.keys().hasAll(["vote"]) &&  
+              //exists(/databases/$(db)/documents/Design/$(requestFields.vote)) //removed for acit tech expo only
+              requestFields.vote in req.auth.token.candidatesIds //  to prevent extra read append candidate_ids in token when generating account
+
+              );
+    }
+
+    function validateCandidateData(req){
+      let requestFields = req.resource.data;
+      return ( (true) &&
+        req.auth.token.isAdmin==true &&
+        requestFields.keys().hasAll(["name","img","p_code"]) &&
+        //requestFields.img=="/DesignCompetition/2021/designId.png" &&
+        requestFields.name.size()>3 &&
+        requestFields.p_code>0// only for acit expo.
+
+        );
     }
   }
 
-  function validateVotingData(req,voterId,db){
-    let requestFields = req.resource.data;
-
-    return ( (true) && 
-            req.auth.token.id==voterId &&  
-            requestFields.keys().hasAll(["vote"]) &&  
-            exists(/databases/$(db)/documents/Design/$(requestFields.vote))
-
-            );
-  }
-
-  function validateDesignData(req){
-    let requestFields = req.resource.data;
-    return ( (true) &&
-      req.auth.token.isAdmin==true &&
-      requestFields.keys().hasAll(["name","img"]) &&
-      //requestFields.img=="/DesignCompetition/2021/designId.png" &&
-      requestFields.name.size()>3
-
-      );
-  }
 }

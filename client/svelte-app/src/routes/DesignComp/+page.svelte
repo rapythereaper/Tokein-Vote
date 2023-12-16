@@ -15,8 +15,8 @@
     <OnUser User={User}/>
 {:else}
     <!-- not loged in give input field-->
-    <h1 class="text-5xl font-bold">Welcome to <br>ACIT Design Blitz -2023!</h1>
-    <p class="py-6">To Vote your favourite design, please enter the token. </p>
+    <h1 class="text-5xl font-bold">Welcome to <br>ACIT Tech Expo -2023!</h1>
+    <p class="py-6">To Vote your favourite project, please enter the token. </p>
     <input bind:value={inputToken} type="text" placeholder="Enter the token" class="input input-bordered w-full max-w-xs" />
     {#if !TokenId}
         <button on:click={()=>{TokenId=inputToken}} class="btn btn-primary">Submit</button>

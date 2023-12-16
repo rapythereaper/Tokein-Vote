@@ -35,7 +35,7 @@
               <li><a>Item 3</a></li>
             </ul>
           </div>
-          <a  href="/DesignComp" class="btn btn-ghost normal-case text-xl">ACIT Design Blitz-2023</a>
+          <a  href="/DesignComp" class="btn btn-ghost normal-case text-xl">ACIT Tech Expo-2023</a>
         </div>
         <div class="navbar-center hidden lg:flex">
           <!--cul class="menu menu-horizontal px-1">

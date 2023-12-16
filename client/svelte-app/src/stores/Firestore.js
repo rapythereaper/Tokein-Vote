@@ -2,13 +2,9 @@ import { FIREBASE_AUTH, FIREBASE_FIRESTORE } from "./Firebase";
 import { collection, doc, Firestore, getDoc, getDocs, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { async } from "@firebase/util";
 
-export const generateTeacherCollection=(collage_name)=>{
-    /* 
-        collc:  /Collages/{collageName}/Teachers/{teacherId}/ 
-        /Collages/Randi Uni/Teachers
-    */
-    return collection(FIREBASE_FIRESTORE,`/Collages/${collage_name}/Teachers`)
-}
+/* to do rename all design related db function to Candidate
+        i.e postDesgin()==> postCandidate();
+*/
 
 
 
@@ -44,7 +40,7 @@ export const fetchDocsListener=async(collectionRef)=>{
 }
 
 export const generateDesignCollection=()=>{
-    return collection(FIREBASE_FIRESTORE,"/Design");
+    return collection(FIREBASE_FIRESTORE,"/Candidates");
 }
 export const generateVoteCollection=()=>{
     return collection(FIREBASE_FIRESTORE,"/Votes");
@@ -58,18 +54,11 @@ export const postVote=async (voterId,designId)=>{
     return {id:docRef.id,...sentData};
 }
 
-export const postDesing=async (name,imgSrc)=>{
+export const postDesing=async (name,imgSrc,p_code)=>{
     const collec=generateDesignCollection();
     const docRef=doc(collec);
-    let sentData={name:name,img:imgSrc};
+    let sentData={name:name,img:imgSrc,p_code:p_code+1}; // p_code for acit; pcode is just length +1 of number pf alreade inserted candidates
     await setDoc(docRef,sentData);
     return {id:docRef.id,...sentData};
 }
 
-export const postTeacherComment=async (collage_name,teacher_id,user_id,comment)=>{
-    const commentCollection=generateCommentCollection(collage_name,teacher_id);
-    const docRef=doc(commentCollection);
-    let sentData={comment:comment,author:user_id,upVote:0,downVote:0,createdAt:serverTimestamp()};
-    await setDoc(docRef,sentData);
-    return {_id:docRef.id,...sentData};
-}

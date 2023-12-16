@@ -55,7 +55,7 @@
         uploading = true;
         try {
             let imgSrc = await uploadDesign(files[0]);
-            let res = await postDesing(name, imgSrc);
+            let res = await postDesing(name, imgSrc,dictLen(designs));
             name = "";
             alert("upload sucess");
             uploading = false;
@@ -150,7 +150,9 @@
             </figure>
             <div class="card-body items-center text-center">
                 <h2 class="card-title">{val.name}</h2>
+                <h2 class="card-title">P-00{val.p_code}</h2> <!-- FOR ACIT tech fect -->
                 <p><!--machikne randi ho timihuru sbai randi ho --></p>
+                
                 <div class="card-actions">
                     <button
                         class="btn btn-error btn-wide btn-secondary"
